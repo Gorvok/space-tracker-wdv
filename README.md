@@ -32,7 +32,7 @@ Space Tracker WDV is a RESTful API designed to manage and provide information ab
 
 1. Clone the repository
    ```
-   git clone https://github.com/yourusername/space-tracker-wdv.git
+   git clone https://github.com/Gorvok/space-tracker-wdv.git
    cd space-tracker-wdv
    ```
 2. Run Docker Container
