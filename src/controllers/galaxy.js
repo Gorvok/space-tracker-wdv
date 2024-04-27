@@ -30,10 +30,13 @@ exports.show = async (req, res) => {
 
 // Create a new galaxy
 exports.create = async (req, res) => {
+  console.log("Received data", req.body);
   try {
     const galaxy = await Galaxy.create(req.body);
+    console.log("Created Galaxy:", galaxy);
     res.status(201).json(galaxy);
   } catch (error) {
+    console.error("Error creating galaxy:", error)
     res.status(400).send(error.message);
   }
 };

@@ -38,6 +38,29 @@ exports.create = async (req, res) => {
   }
 };
 
+exports.addStarToPlanet = async (req, res) => {
+  const { planetId } = req.params;
+  const { starId } = req.body;
+
+  try {
+    const planet = await Planet.findByPk(planetId);
+    if (!planet) {
+      return res.status(404).send('Planet not found');
+    }
+
+    const star = await Star.findByPk(starId);
+    if (!star) {
+      return res.status(404).send('Star not found');
+    }
+
+    await planet.addStar(star);
+    res.status(200).send('Star added to planet successfully');
+  } catch (error) {
+    console.error('Error adding star to planet:', error);
+    res.status(500).send(error.message);
+  }
+};
+
 // Update an existing planet
 exports.update = async (req, res) => {
   try {

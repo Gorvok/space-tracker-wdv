@@ -10,6 +10,7 @@ const router = new express.Router()
 // RESTful resource mappings
 router.get(`/`, planetCtlr.index)
 router.post(`/`, planetCtlr.create)
+router.post('/:planetId/stars', planetCtlr.addStarToPlanet)
 router.get(`/:id`, planetCtlr.show) 
 router.put(`/:id`, planetCtlr.update) 
 router.delete(`/:id`, planetCtlr.remove) 
