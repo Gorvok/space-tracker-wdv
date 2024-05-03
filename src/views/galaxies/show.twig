@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>{{ galaxy.name }}</h1>
+    <p>Size: {{ galaxy.size }}</p>
+    <p>Description: {{ galaxy.description }}</p>
+    <img src="{{ galaxy.imageUrl }}" alt="Image of {{ galaxy.name }}">
+
+    <a href="/galaxies/{{ galaxy.id }}/update">Update Galaxy</a>
+    <form action="/galaxies/{{ galaxy.id }}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete Galaxy</button>
+    </form>
+
+    <a href="/galaxies">Back to List</a>
+{% endblock %}

@@ -1,6 +1,10 @@
 // Load in our Express framework
 const express       = require(`express`)
 
+const fileUpload = require('express-fileupload')
+
+const methodOverride = require('method-override');
+
 // Create a new Express instance called "app"
 const app           = express()
 
@@ -9,13 +13,18 @@ const db = require('./src/models')
 // Load in our RESTful routers
 const routers = require('./routers/index.js')
 
+app.use(express.static('public'));
+app.use(fileUpload());
+app.use(methodOverride('_method'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.set('views', __dirname + '/src/views')
+app.set('view engine', 'twig')
 
 // Home page welcome middleware
 app.get('/', (req, res) => {
-  res
-    .status(200)
-    .send('Welcome to Star Tracker Library')
+  res.render('home')
 })
 
 // Register our RESTful routers with our "app"

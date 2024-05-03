@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>Galaxies</h1>
+    <a href="/galaxies/create">Add New Galaxy</a>
+    <ul>
+        {% for galaxy in galaxies %}
+            <li>
+                <a href="/galaxies/{{ galaxy.id }}">{{ galaxy.name }}</a> |
+                <a href="/galaxies/{{ galaxy.id }}/update">Update</a> |
+                <form action="/galaxies/{{ galaxy.id }}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

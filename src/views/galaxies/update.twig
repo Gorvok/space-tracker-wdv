@@ -1,0 +1,28 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>Update Galaxy</h1>
+    <form action="/galaxies/{{ galaxy.id }}?_method=PUT" method="post">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ galaxy.name }}" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="size">Size:</label>
+            <input type="number" id="size" name="size" value="{{ galaxy.size }}" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required class="form-control">{{ galaxy.description }}</textarea>
+        </div>
+
+        <label for="image">Galaxy Image:</label>
+        <input type="file" id="image" name="image">
+
+        <button type="submit" class="btn btn-primary">Update Galaxy</button>
+    </form>
+
+    <a href="/galaxies/{{ galaxy.id }}" class="btn btn-default">Cancel</a>
+{% endblock %}
