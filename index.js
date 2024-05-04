@@ -12,12 +12,21 @@ const db = require('./src/models')
 
 // Load in our RESTful routers
 const routers = require('./routers/index.js')
+const galaxyRouter = require('./routers/galaxy');
+app.use('/galaxies', galaxyRouter);
+const planetRouter = require('./routers/planet');
+app.use('/galaxies', planetRouter);
+const starRouter = require('./routers/star');
+app.use('/galaxies', starRouter);
+
 
 app.use(express.static('public'));
-app.use(fileUpload());
-app.use(methodOverride('_method'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({
+  createParentPath: true
+}));
+app.use(methodOverride('_method'));
 
 app.set('views', __dirname + '/src/views')
 app.set('view engine', 'twig')

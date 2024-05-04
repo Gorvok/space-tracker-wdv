@@ -1,0 +1,22 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Create New Galaxy{% endblock %}
+
+{% block content %}
+    <h1>Create a New Galaxy</h1>
+    <form action="/galaxies" method="post" enctype="multipart/form-data">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="size">Size:</label>
+        <input type="number" id="size" name="size" required><br><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*"><br><br>
+
+        <button type="submit">Create Galaxy</button>
+    </form>
+{% endblock %}

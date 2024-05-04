@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>{{ planet.name }}</h1>
+    <p>Size: {{ planet.size }}</p>
+    <p>Description: {{ planet.description }}</p>
+        <img src="{{ planet.imageUrl }}" alt="Image of {{ planet.name }}">
+
+    <a href="/planets/{{ planet.id }}/update">Edit Planet</a>
+    <form action="/planets/{{ planet.id }}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete Planet</button>
+    </form>
+
+    <a href="/planets">Back to List</a>
+{% endblock %}

@@ -1,4 +1,6 @@
 const { Galaxy, Star } = require('../models');
+const path = require('path');
+const fs = require('fs');
 
 // Show all galaxies
 exports.index = async (req, res) => {
@@ -8,9 +10,9 @@ exports.index = async (req, res) => {
     });
     // Check if the client accepts HTML
     if (req.accepts('html')) {
-      res.render('galaxies/index', { galaxies }); // Render a Twig template
+      res.render('galaxies/index', { galaxies });
     } else {
-      res.json(galaxies); // Respond with JSON
+      res.json(galaxies);
     }
   } catch (error) {
     console.error('Failed to retrieve galaxies:', error);
@@ -26,9 +28,9 @@ exports.show = async (req, res) => {
     });
     if (galaxy) {
       if (req.accepts('html')) {
-        res.render('galaxies/show', { galaxy }); // Render a Twig template
+        res.render('galaxies/show', { galaxy });
       } else {
-        res.json(galaxy); // Respond with JSON
+        res.json(galaxy);
       }
     } else {
       res.status(404).send('Galaxy not found');
@@ -43,18 +45,38 @@ exports.show = async (req, res) => {
 exports.create = async (req, res) => {
   console.log("Received data", req.body);
   try {
-    const galaxy = await Galaxy.create(req.body);
-    console.log("Created Galaxy:", galaxy);
+    const galaxyData = {
+      name: req.body.name,
+      size: req.body.size,
+      description: req.body.description,
+      imageUrl: '',
+    };
+
+    if (req.files && req.files.image) {
+      const image = req.files.image;
+      const imageName = new Date().getTime() + path.extname(image.name);
+      const uploadPath = path.join(__dirname, '../public/uploads/galaxies', imageName);
+      await image.mv(uploadPath);
+      galaxyData.imageUrl = `/uploads/galaxies/${imageName}`;
+    }
+
+    const galaxy = await Galaxy.create(galaxyData);
     if (req.accepts('html')) {
-      res.redirect(`/galaxies/${galaxy.id}`); // Redirect to the galaxy page
+      res.redirect(`/galaxies/${galaxy.id}`);
     } else {
-      res.status(201).json(galaxy); // Respond with JSON
+      res.status(201).json(galaxy);
     }
   } catch (error) {
     console.error("Error creating galaxy:", error);
     res.status(400).send(error.message);
   }
 };
+
+
+const uploadDirGalaxies = path.join(__dirname, '../../public/uploads/galaxies');
+if (!fs.existsSync(uploadDirGalaxies)) {
+  fs.mkdirSync(uploadDirGalaxies, { recursive: true });
+}
 
 // Update an existing galaxy
 exports.update = async (req, res) => {
@@ -63,34 +85,24 @@ exports.update = async (req, res) => {
     if (!galaxy) {
       return res.status(404).send('Galaxy not found');
     }
-    console.log(req.files);
 
-    // Handle the uploaded file
     if (req.files && req.files.image) {
       const image = req.files.image;
-      console.log(image);
-      const uploadPath = path.join(__dirname, '../public/uploads/galaxies', image.name);
+      const imageName = new Date().getTime() + path.extname(image.name);
+      const uploadPath = path.join(uploadDirGalaxies, imageName);
 
-      // Use the mv() method to place the file on the server
-      image.mv(uploadPath, function(err) {
-        if (err) {
-          console.error('File Move Error:', err);
-          return res.status(500).send(err);
-        }
-        console.log('File uploaded to:', uploadPath);
-      });
+      await image.mv(uploadPath);
 
-      // Update galaxy with the path of the new image
-      galaxy.image = '/uploads/galaxies' + image.name;
+      galaxy.imageUrl = `/uploads/galaxies/${imageName}`;
+      await galaxy.save();
     }
 
-    // Update other fields
     await galaxy.update(req.body);
 
     if (req.accepts('html')) {
       res.redirect(`/galaxies/${galaxy.id}`);
     } else {
-      res.json(galaxy);
+      res.status(200).json(galaxy);
     }
   } catch (error) {
     console.error('Error updating galaxy:', error);
@@ -104,7 +116,7 @@ exports.updateForm = async (req, res) => {
       include: [{ model: Star, as: 'stars' }]
     });
     if (galaxy) {
-      res.render('galaxies/update', { galaxy });  // Assumes you have a 'galaxies/update.twig'
+      res.render('galaxies/update', { galaxy });
     } else {
       res.status(404).send('Galaxy not found');
     }
@@ -121,9 +133,9 @@ exports.remove = async (req, res) => {
     if (galaxy) {
       await galaxy.destroy();
       if (req.accepts('html')) {
-        res.redirect('/galaxies'); // Redirect to the list
+        res.redirect('/galaxies');
       } else {
-        res.status(204).end(); // Send a no-content response
+        res.status(204).end();
       }
     } else {
       res.status(404).send('Galaxy not found');

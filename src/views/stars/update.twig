@@ -1,0 +1,23 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>Edit Star</h1>
+    <form action="/stars/{{ star.id }}?_method=PUT" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ star.name }}" required>
+
+        <label for="size">Size:</label>
+        <input type="number" id="size" name="size" value="{{ star.size }}" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description">{{ star.description }}</textarea>
+
+        <label for="image">Star Image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+
+        <button type="submit">Update Star</button>
+    </form>
+
+    <a href="/stars/{{ star.id }}">Cancel</a>
+{% endblock %}

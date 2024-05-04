@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>Stars</h1>
+    <a href="/stars/new">Add New Star</a>
+    <ul>
+        {% for star in stars %}
+            <li>
+                <a href="/stars/{{ star.id }}">{{ star.name }}</a> |
+                <a href="/stars/{{ star.id }}/update">Edit</a> |
+                <form action="/stars/{{ star.id }}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>{{ star.name }}</h1>
+    <p>Size: {{ star.size }}</p>
+    <p>Description: {{ star.description }}</p>
+    <img src="{{ star.imageUrl }}" alt="Image of {{ star.name }}">
+
+    <a href="/stars/{{ star.id }}/update">Edit Star</a>
+    <form action="/stars/{{ star.id }}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete Star</button>
+    </form>
+
+    <a href="/stars">Back to List</a>
+{% endblock %}

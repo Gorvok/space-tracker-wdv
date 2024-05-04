@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1>Planets</h1>
+    <a href="/planets/new">Add New Planet</a>
+    <ul>
+        {% for planet in planets %}
+            <li>
+                <a href="/planets/{{ planet.id }}">{{ planet.name }}</a> |
+                <a href="/planets/{{ planet.id }}/update">Edit</a> |
+                <form action="/planets/{{ planet.id }}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
